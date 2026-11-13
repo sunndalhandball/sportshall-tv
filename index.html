@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="no"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sunndal sportshall</title>
+<style>html,body{margin:0;width:100%;height:100%;background:#000;overflow:hidden}img{position:absolute;width:100%;height:100%;object-fit:contain}#status{color:white;font:20px sans-serif;position:absolute;top:1em;left:1em}</style></head>
+<body><img id="slide" alt=""><div id="status">Laster bilder …</div><script>
+(function(){'use strict';
+var list=[], index=-1, busy=false, slide=document.getElementById('slide'), status=document.getElementById('status');
+function advance(){if(busy||!list.length)return; busy=true; var attempts=0;
+function tryNext(){if(attempts++>=list.length){busy=false;status.textContent='Bildene er ikke tilgjengelige. Prøver igjen …';return;}
+index=(index+1)%list.length; var url=list[index], probe=new Image(), done=false;
+var timer=setTimeout(function(){finish(false)},12000);
+function finish(ok){if(done)return;done=true;clearTimeout(timer);probe.onload=probe.onerror=null;if(ok){slide.src=url;status.textContent='';busy=false;}else tryNext();}
+probe.onload=function(){finish(true)};probe.onerror=function(){finish(false)};probe.src=url;}
+tryNext();}
+function refresh(){var request=new XMLHttpRequest();request.open('GET','images.json?t='+Date.now(),true);request.timeout=20000;
+request.onload=function(){if(request.status<200||request.status>=300)return;try{var data=JSON.parse(request.responseText);if(!Array.isArray(data.images))return;var next=data.images.filter(function(x){return typeof x==='string'&&/^https:\/\/lh3\.googleusercontent\.com\/d\/[\w-]+$/.test(x)});if(!next.length){list=[];index=-1;slide.removeAttribute('src');status.textContent='Ingen bilder i mappen.';return;}var current=list[index];list=next;index=list.indexOf(current);if(!slide.getAttribute('src')||index<0){index=-1;advance();}}catch(e){}};
+request.send();}
+refresh();setInterval(advance,5000);setInterval(refresh,60000);
+})();</script></body></html>

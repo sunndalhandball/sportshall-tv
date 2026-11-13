@@ -1,0 +1,11 @@
+Oppsett for Sunndal IL Håndball
+
+1. Last opp innholdet i denne pakken til roten av https://github.com/sunndalhandball/sportshall-tv. Pass på at også den skjulte mappen .github med workflows/publish.yml kommer med. Ikke slett eksisterende filer uten å kontrollere dem først.
+2. Gå til Settings → Pages. Velg «GitHub Actions» under Build and deployment → Source.
+3. Gå til Actions → «Oppdater og publiser sportshall-TV» → Run workflow → Run workflow. Godkjenn aktivering av Actions hvis GitHub ber om det.
+4. Åpne kjøringen og kontroller at alle steg er grønne. Feiler «Hent bildelisten» på grunn av ukjent format, kopier feedens JSON og be om hjelp til å tilpasse scripts/update.py. Siste vellykkede nettside beholdes ved feil.
+5. Åpne https://sunndalhandball.github.io/sportshall-tv/ og kontroller at bildene vises. Legg så denne adressen inn som nettside i Cloud.show.
+
+Bildelisten hentes normalt to ganger i timen; GitHub kan forsinke planlagte kjøringer. Siden sjekker ny liste hvert minutt og bytter bilde hvert femte sekund. Første publisering og endringer kan bruke noen minutter. Ved feil på et bilde forsøkes neste, og ved midlertidig nettverksfeil beholdes siste liste. En tom, gyldig feed tømmer listen.
+
+Bildene må være offentlig tilgjengelige via Google Disk. Selve bildefilene lastes fra Google, mens bildelisten lastes fra GitHub Pages. Feedadressen er offentlig og brukes bare av GitHub Actions; ingen personlige tilgangsnøkler er lagt inn. Offentlige repoer kan få planlagte kjøringer deaktivert etter lengre tids inaktivitet; kontroller Actions ved problemer.
